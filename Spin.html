@@ -13,10 +13,11 @@
 </head>
 <body>
 
-    <h1>Spin Nội Dung</h1>
-    <p>Nhấn nút "Tạo Nội Dung" để tạo nội dung mới.</p>
+    <h1>Spin Content Generator</h1>
+    <p>Nhập nội dung theo cú pháp <code>{option1|option2|...}</code> và nhấn nút "Tạo Nội Dung" để tạo nội dung mới.</p>
     
-    <textarea id="inputText" placeholder="Nhập nội dung ở đây...">{A{B|C}|{D|E}}</textarea>
+    <textarea id="inputText" placeholder="Nhập nội dung ở đây...">{A{B|C}|{D|E}}
+    Chú ý: Bạn có thể sử dụng dấu xuống dòng và khoảng trắng trong văn bản.</textarea>
     
     <div>
         <button onclick="generateContent()">Tạo Nội Dung</button>
@@ -31,6 +32,7 @@
     </div>
 
     <script>
+        // Hàm để spin văn bản theo cú pháp {option1|option2|...}
         function spinText(text) {
             const regex = /\{([^{}]*)\}/;
 
@@ -43,16 +45,19 @@
             return text;
         }
 
+        // Hàm tạo nội dung từ văn bản nhập vào
         function generateContent() {
             const inputText = document.getElementById("inputText").value;
             const outputText = spinText(inputText);
             document.getElementById("outputText").textContent = outputText;
         }
 
+        // Hàm xóa nội dung nhập vào
         function clearInput() {
             document.getElementById("inputText").value = '';
         }
 
+        // Hàm dán nội dung từ bộ nhớ tạm (clipboard)
         async function pasteClipboard() {
             try {
                 const text = await navigator.clipboard.readText();
