@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spin Content Generator</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; }
+        textarea { width: 100%; height: 150px; margin-bottom: 10px; font-family: monospace; }
+        button { padding: 10px 20px; font-size: 16px; cursor: pointer; margin-right: 10px; }
+        .result { margin-top: 20px; padding: 10px; border: 1px solid #ddd; background-color: #f9f9f9; white-space: pre-wrap; word-wrap: break-word; }
+    </style>
+</head>
+<body>
+
+    <h1>Spin Nội Dung</h1>
+    <p>Nhấn nút "Tạo Nội Dung" để tạo nội dung mới.</p>
+    
+    <textarea id="inputText" placeholder="Nhập nội dung ở đây...">{A{B|C}|{D|E}}</textarea>
+    
+    <div>
+        <button onclick="generateContent()">Tạo Nội Dung</button>
+        <button onclick="clearInput()">Xóa Nội Dung</button>
+        <button onclick="pasteClipboard()">Dán Nội Dung Từ Bộ Nhớ Tạm</button>
+        <button onclick="copyToClipboard()">Sao Chép Kết Quả</button>
+    </div>
+
+    <div class="result">
+        <h3>Nội Dung Được Tạo:</h3>
+        <p id="outputText"></p>
+    </div>
+
+    <script>
+        function spinText(text) {
+            const regex = /\{([^{}]*)\}/;
+
+            while (regex.test(text)) {
+                text = text.replace(regex, (match, options) => {
+                    const choices = options.split("|");
+                    return choices[Math.floor(Math.random() * choices.length)];
+                });
+            }
+            return text;
+        }
+
+        function generateContent() {
+            const inputText = document.getElementById("inputText").value;
+            const outputText = spinText(inputText);
+            document.getElementById("outputText").textContent = outputText;
+        }
+
+        function clearInput() {
+            document.getElementById("inputText").value = '';
+        }
+
+        async function pasteClipboard() {
+            try {
+                const text = await navigator.clipboard.readText();
+                document.getElementById("inputText").value = text;
+            } catch (err) {
+                alert('Không thể dán nội dung từ bộ nhớ tạm!');
+            }
+        }
+
+        // Hàm sao chép kết quả vào bộ nhớ tạm
+        function copyToClipboard() {
+            const outputText = document.getElementById("outputText").textContent;
+            if (outputText) {
+                navigator.clipboard.writeText(outputText)
+                    .then(() => alert('Đã sao chép kết quả vào bộ nhớ tạm!'))
+                    .catch(() => alert('Không thể sao chép kết quả!'));
+            } else {
+                alert('Không có kết quả để sao chép!');
+            }
+        }
+    </script>
+
+</body>
+</html>
