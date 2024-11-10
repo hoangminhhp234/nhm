@@ -57,7 +57,16 @@
                 totalCombinations *= choices.length;
             }
 
-            return totalCombinations;
+            return formatLargeNumber(totalCombinations);
+        }
+
+        // Hàm định dạng số lớn thành dạng "triệu", "tỷ", v.v.
+        function formatLargeNumber(number) {
+            if (number < 1e6) return number.toLocaleString();
+            if (number < 1e9) return (number / 1e6).toFixed(2) + " triệu";
+            if (number < 1e12) return (number / 1e9).toFixed(2) + " tỷ";
+            if (number < 1e15) return (number / 1e12).toFixed(2) + " nghìn tỷ";
+            return (number / 1e15).toFixed(2) + " triệu tỷ";
         }
 
         // Hàm tạo nội dung từ văn bản nhập vào và hiển thị số lượng tổ hợp
