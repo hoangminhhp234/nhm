@@ -28,6 +28,10 @@
     <div class="result">
         <p id="outputText"></p>
     </div>
+    <h3>Số lượng nội dung có thể tạo:</h3>
+    <div class="result">
+        <p id="totalCombinations"></p>
+    </div>
 
     <script>
         // Hàm để spin văn bản theo cú pháp {option1|option2|...}
@@ -43,16 +47,35 @@
             return text;
         }
 
-        // Hàm tạo nội dung từ văn bản nhập vào
+        // Hàm đếm số lượng tổ hợp có thể tạo được từ văn bản
+        function countCombinations(text) {
+            const regex = /\{([^{}]*)\}/g;
+            let match;
+            let totalCombinations = 1;
+
+            while ((match = regex.exec(text)) !== null) {
+                const choices = match[1].split("|");
+                totalCombinations *= choices.length;
+            }
+
+            return totalCombinations;
+        }
+
+        // Hàm tạo nội dung từ văn bản nhập vào và hiển thị số lượng tổ hợp
         function generateContent() {
             const inputText = document.getElementById("inputText").value;
             const outputText = spinText(inputText);
             document.getElementById("outputText").textContent = outputText;
+
+            const totalCombinations = countCombinations(inputText);
+            document.getElementById("totalCombinations").textContent = totalCombinations;
         }
 
         // Hàm xóa nội dung nhập vào
         function clearInput() {
             document.getElementById("inputText").value = '';
+            document.getElementById("outputText").textContent = '';
+            document.getElementById("totalCombinations").textContent = '';
         }
 
         // Hàm dán nội dung từ bộ nhớ tạm (clipboard)
