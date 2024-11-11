@@ -60,9 +60,9 @@
             return formatLargeNumber(totalCombinations);
         }
 
-        // Hàm định dạng số lớn thành dạng "triệu", "tỷ", v.v.
+        // Hàm định dạng số lớn thành dạng "triệu", "tỷ", "tỷ tỷ", v.v.
         function formatLargeNumber(number) {
-            const units = ["", "nghìn", "triệu", "tỷ", "nghìn tỷ", "triệu tỷ"];
+            const units = ["", "nghìn", "triệu", "tỷ", "tỷ tỷ", "tỷ tỷ tỷ", "tỷ tỷ tỷ tỷ"];
             let unitIndex = 0;
 
             while (number >= 1000 && unitIndex < units.length - 1) {
