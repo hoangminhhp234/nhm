@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spin Nội Dung</title>
+    <title>Tạo Nội Dung Theo Kịch Bản</title>
     <style>
         body { font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; }
         textarea { width: 100%; height: 100px; margin-bottom: 10px; font-family: monospace; line-height: 1.4; padding: 8px; }
@@ -17,7 +17,7 @@
 <body>
 
     <h1>Spin Nội Dung</h1>
-    <textarea id="inputText" placeholder="Nhập nội dung cần spin ở đây..."></textarea>
+    <textarea id="inputText" placeholder="Nhập nội dung kịch bản ở đây {0|9|7|1|2|8|2|3|3|6}..."></textarea>
     
     <div>
         <button onclick="generateContent()">Tạo Nội Dung</button>
@@ -33,7 +33,6 @@
     </div>
 
     <script>
-        // Hàm để spin văn bản theo cú pháp {option1|option2|...}
         function spinText(text) {
             const regex = /\{([^{}]*)\}/;
 
@@ -46,38 +45,39 @@
             return text;
         }
 
-        // Hàm đếm số lượng tổ hợp có thể tạo được từ văn bản
-        function countCombinations(text) {
-            const regex = /\{([^{}]*)\}/g;
-            let match;
-            let totalCombinations = 1;
+        function countNestedCombinations(text) {
+    const regex = /\{([^{}]*)\}/;
+    let totalCombinations = 0;     
 
-            while ((match = regex.exec(text)) !== null) {
-                const choices = match[1].split("|");
-                totalCombinations *= choices.length;
-            }
 
-            return totalCombinations.toLocaleString("en-US"); // Hiển thị số theo dạng thông thường
-        }
+    while (regex.test(text)) {
+        text = text.replace(regex, (match, options) => {
+            const choices = options.split("|");    
+            const choicesCount = choices.length;   
+            totalCombinations += choicesCount;     
+            return "";                            
+        });
+    }
 
-        // Hàm tạo nội dung từ văn bản nhập vào và hiển thị số lượng tổ hợp
+    return totalCombinations.toLocaleString("en-US"); 
+}
+
+
         function generateContent() {
             const inputText = document.getElementById("inputText").value;
             const outputText = spinText(inputText);
             document.getElementById("outputText").textContent = outputText;
 
-            const totalCombinations = countCombinations(inputText);
+            const totalCombinations = countNestedCombinations(inputText);
             document.getElementById("totalCombinations").textContent = totalCombinations;
         }
 
-        // Hàm xóa nội dung nhập vào
         function clearInput() {
             document.getElementById("inputText").value = '';
             document.getElementById("outputText").textContent = '';
             document.getElementById("totalCombinations").textContent = '0';
         }
 
-        // Hàm dán nội dung từ bộ nhớ tạm (clipboard)
         async function pasteClipboard() {
             try {
                 const text = await navigator.clipboard.readText();
@@ -87,7 +87,6 @@
             }
         }
 
-        // Hàm sao chép kết quả vào bộ nhớ tạm
         function copyToClipboard() {
             const outputText = document.getElementById("outputText").textContent;
             if (outputText) {
