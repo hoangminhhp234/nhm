@@ -16,7 +16,7 @@
 </head>
 <body>
 
-    <h1>Spin Nội Dung</h1>
+    <h1>Tạo Nội Dung Theo Kịch Bản (Spin)</h1>
     <textarea id="inputText" placeholder="Nhập nội dung kịch bản ở đây {0|9|7|1|2|8|2|3|3|6}..."></textarea>
     
     <div>
@@ -26,7 +26,6 @@
         <button onclick="copyToClipboard()">Sao Chép Kết Quả</button>
     </div>
     
-    <p class="small-info">Số lượng nội dung có thể tạo: <span id="totalCombinations">0</span></p>
     <h3>Nội Dung Được Tạo:</h3>
     <div class="result">
         <p id="outputText"></p>
@@ -45,30 +44,12 @@
             return text;
         }
 
-        function countNestedCombinations(text) {
-    const regex = /\{([^{}]*)\}/;
-    let totalCombinations = 0;     
-
-
-    while (regex.test(text)) {
-        text = text.replace(regex, (match, options) => {
-            const choices = options.split("|");    
-            const choicesCount = choices.length;   
-            totalCombinations += choicesCount;     
-            return "";                            
-        });
-    }
-
-    return totalCombinations.toLocaleString("en-US"); 
-}
-
-
         function generateContent() {
             const inputText = document.getElementById("inputText").value;
             const outputText = spinText(inputText);
             document.getElementById("outputText").textContent = outputText;
 
-            const totalCombinations = countNestedCombinations(inputText);
+            const totalCombinations = countCombinations(inputText);
             document.getElementById("totalCombinations").textContent = totalCombinations;
         }
 
@@ -86,7 +67,7 @@
                 alert('Không thể dán nội dung từ bộ nhớ tạm!');
             }
         }
-
+        
         function copyToClipboard() {
             const outputText = document.getElementById("outputText").textContent;
             if (outputText) {
@@ -98,6 +79,5 @@
             }
         }
     </script>
-
 </body>
 </html>
